@@ -1,30 +1,34 @@
-const User = require('../models/user');
+// @desc    show all users
+// @route   GET /api/v1/users
+// @access  public
+exports.getUsers = (req, res, next) => {
+    res.status(200).json({ success: true, msg: 'Show all users' });
+};
 
-exports.createUser = async (req, res, next) => {
-    try {
-        const user = await User.create(req.body);
+// @desc    show single user
+// @route   GET /api/v1/users/:id
+// @access  public
+exports.getUser = (req, res, next) => {
+    res.status(200).json({ success: true, msg: `Show user ${req.params.id}` });
+};
 
-        res.status(201).json({
-            success: true,
-            data: user
-        })
-    } catch(error) {
-        console.error('Failed', error);
-        res.status(401).json({
-            success: false,
-            message: error.message
-        })
-    };
-}
+// @desc    update user
+// @route   PUT /api/v1/users/:id
+// @access  private
+exports.updateUser = (req, res, next) => {
+    res.status(200).json({ success: true, msg: `Update user ${req.params.id}` });
+};
 
-exports.getUser = async (req, res) => {
-    try {
-        
-    } catch(error) {
-        console.error('Not Found', error);
-        res.status(404).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+// @desc    create user
+// @route   POST /api/v1/users
+// @access  private
+exports.createUser = (req, res, next) => {
+    res.status(200).json({ success: true, msg: 'Create new user' });
+};
+
+// @desc    delete user
+// @route   DELETE /api/v1/users/:id
+// @access  private
+exports.deleteUser = (req, res, next) => {
+    res.status(200).json({ success: true, msg: `Delete user ${req.params.id}` });
+};
