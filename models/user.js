@@ -1,31 +1,51 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { default: slugify } = require('slugify');
 
-const userShema = new mongoose.Schema({
+const UserShema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: [true, 'Please add a name'],
+        unique: true
     },
     email: {
         type: String,
-        required: true,
+        required: [true, 'Please add an email'],
         unique: true,
         match: [
             /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
             'Please add a valid email'
           ]
     },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    },
     password: {
         type: String,
-        required: true,
+        required: [true, 'Please add a password'],
         minlength: 6,
         select: false
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
     createdAt: {
         type: Date,
         default: Date.now
-    }
-})
+    },
+    slug: String,
+});
 
-module.exports = mongoose.model('User', userShema);
+UserShema.pre('save', function (next) {
+    this.slug = slugify(this.name, { lower: true });
+    next();
+});
+
+UserShema.pre('save', async function(next) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
+
+module.exports = mongoose.model('User', UserShema);
