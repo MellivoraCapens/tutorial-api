@@ -48,4 +48,14 @@ UserShema.pre('save', async function(next) {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
+UserShema.methods.getSignedJwtToken = function() {
+    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRE
+    })
+};
+
+UserShema.methods.matchPassword = async function(enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+};
+
 module.exports = mongoose.model('User', UserShema);

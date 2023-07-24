@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const asyncHandler = require('../middleware/async');
-const ErrorRespose = require('../utils/errorResponse');
+const ErrorResponse = require('../utils/errorResponse');
 
 // @desc    show all users
 // @route   GET /api/v1/users
@@ -22,7 +22,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
         const user = await User.findById(req.params.id);
 
         if(!user) {
-             return next(new ErrorRespose(`User not found with id of ${req.params.id}`, 404));
+             return next(new ErrorResponse(`User not found with id of ${req.params.id}`, 404));
         }
 
         res.status(200).json({
@@ -39,9 +39,8 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
             new: true,
             runValidators: true
         });
-    
         if(!user) {
-            return next(new ErrorRespose(`User not found with id of ${req.params.id}`, 404));
+            return next(new ErrorResponse(`User not found with id of ${req.params.id}`, 404));
         }
     
         res.status(200).json({
@@ -69,7 +68,7 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
         const user = await User.findByIdAndDelete(req.params.id);
 
         if(!user) {
-            return next(new ErrorRespose(`User not found with id of ${req.params.id}`, 404));
+            return next(new ErrorResponse(`User not found with id of ${req.params.id}`, 404));
         }
 
         res.status(200).json({
