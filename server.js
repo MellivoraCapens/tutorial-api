@@ -1,10 +1,11 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan =  require("morgan");
+const cookieParser = require("cookie-parser")
 const errorHandler = require("./middleware/error")
 const connectDB = require("./config/db");
 
-const users = require("./routes/users.js");
+const users = require('./routes/users.js');
 const auth = require('./routes/auth');
 
 dotenv.config({ path: './config/config.env' });
@@ -14,6 +15,8 @@ connectDB();
 const app = express();
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 if(process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));

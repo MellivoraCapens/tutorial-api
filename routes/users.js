@@ -8,15 +8,17 @@ const {
 
 const router = express.Router();
 
+const { protect } = require('../middleware/auth');
+
 router
     .route('/')
     .get(getUsers)
-    .post(createUser);
+    .post(protect, createUser);
 
 router
     .route('/:id')
     .get(getUser)
-    .put(updateUser)
-    .delete(deleteUser);
+    .put(protect, updateUser)
+    .delete(protect, deleteUser);
 
 module.exports = router;
